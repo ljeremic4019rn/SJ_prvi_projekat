@@ -1,39 +1,49 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface, DataTypes) => {
     await queryInterface.createTable('Exams', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
+
       date: {
-        type: Sequelize.DATE
+        type: DataTypes.DATE,
+        allowNull: false
       },
       time: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
       },
       points: {
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false
       },
-      classroom: {
-        type: Sequelize.STRING
+      classroom:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
       },
       guard: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
       },
+  
+
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, DataTypes) => {
     await queryInterface.dropTable('Exams');
   }
 };

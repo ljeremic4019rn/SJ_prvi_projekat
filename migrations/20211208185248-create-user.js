@@ -1,51 +1,72 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface, DataTypes) => {
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
+
       name: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
       lastname: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
       birthday: {
-        type: Sequelize.DATE
+        type: DataTypes.DATE,
+        allowNull: false
       },
-      email: {
-        type: Sequelize.STRING
+      email:    {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: {
+            msg: "Nije email"
+          }
+        }
       },
       username: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
       },
       password: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
       admin: {
-        type: Sequelize.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       moderator: {
-        type: Sequelize.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       student: {
-        type: Sequelize.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
+
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, DataTypes) => {
     await queryInterface.dropTable('Users');
   }
 };

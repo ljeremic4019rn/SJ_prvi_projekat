@@ -9,8 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate({ Faculty, Subject }) {
       // define association here
+      this.belongsTo(Faculty, {foreignKey: 'facultyId', as: 'facutly'});
+      this.hasMany(Subject, { foreignKey: 'subjectId', as: 'subject' });//ovo je mozda bespotrebno
     }
   };
   User.init({
@@ -59,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
-    },
+    }
   }, {
     sequelize,
     defaultScope:{
