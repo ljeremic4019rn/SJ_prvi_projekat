@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Faculty, Exam }) {
       // define association here
-      this.belongsTo(Faculty, { foreignKey: 'facultyId', as: 'faculty' });
-      this.hasMany(Exam, { foreignKey: 'examId', as: 'exam', onDelete: 'cascade', hooks: true  });
+      this.belongsTo(Faculty, { foreignKey: 'id', as: 'faculty' });
+      this.hasMany(Exam, { foreignKey: 'id', as: 'exam', onDelete: 'cascade', hooks: true  });
     }
   };
   Subject.init({

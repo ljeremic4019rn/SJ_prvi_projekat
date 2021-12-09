@@ -31,7 +31,6 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
-  
 
       createdAt: {
         allowNull: false,

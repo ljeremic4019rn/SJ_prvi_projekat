@@ -5,13 +5,13 @@ const path = require('path');
 
 const app = express();
 
-//app.use('/api', endpoints);
+app.use('/admin', endpoints);
 
-console.log("string test");
+
 
 app.get('/', (req, res) => {
-    console.log("molim te");
-    res.sendFile('index.html', {root: './static'});
+    res.send("welcome")
+   // res.sendFile('index.html', {root: './static'});
 });
 
 
