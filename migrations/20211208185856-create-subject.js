@@ -17,12 +17,10 @@ module.exports = {
       professor: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
       },
       assistent: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
       },
       year: {
         type: DataTypes.INTEGER,

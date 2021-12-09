@@ -1,11 +1,17 @@
 const express = require('express');
 const { sequelize } = require('./models');
-const endpoints = require('./routes/endPoints');//ovde se impl router iz endPoints ubacuje
+const userapi = require('./routes/userApi');//ovde se impl router iz endPoints ubacuje
+const facultyapi = require('./routes/facultyApi');
+const subjectapi = require('./routes/subjectApi');
+const examapi = require('./routes/examApi');
 const path = require('path');
 
 const app = express();
 
-app.use('/admin', endpoints);
+app.use('/admin/user', userapi);
+app.use('/admin/faculty', facultyapi);
+app.use('/admin/subject', subjectapi);
+app.use('/admin/exam', examapi);
 
 
 

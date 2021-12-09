@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     classroom:{
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: false
     },
     guard: {
       type: DataTypes.STRING,

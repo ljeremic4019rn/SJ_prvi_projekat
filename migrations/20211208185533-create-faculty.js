@@ -17,7 +17,7 @@ module.exports = {
       dean:  {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: false
       },
       accredited: {
         type: DataTypes.BOOLEAN,
@@ -27,7 +27,7 @@ module.exports = {
       street: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: false
       },
       startDate: {
         type: DataTypes.DATE,

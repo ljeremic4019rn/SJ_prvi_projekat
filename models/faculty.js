@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     dean:  {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: false
     },
     accredited: {
       type: DataTypes.BOOLEAN,
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     street: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
+    unique: false
     },
     startDate: {
       type: DataTypes.DATE,
