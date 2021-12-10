@@ -55,6 +55,10 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
+      facultyId:{
+        type: DataTypes.INTEGER,//proveri
+        allowNull: false
+      },
 
       createdAt: {
         allowNull: false,
@@ -64,6 +68,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.DATE
       }
+      
     });
   },
   down: async (queryInterface, DataTypes) => {

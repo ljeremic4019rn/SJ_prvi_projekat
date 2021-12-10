@@ -30,6 +30,14 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+      facultyId:{
+        type: DataTypes.INTEGER,//proveri
+        allowNull: false
+      },
+      userId:{
+        type: DataTypes.INTEGER,//proveri
+        allowNull: false
+      },
 
       createdAt: {
         allowNull: false,

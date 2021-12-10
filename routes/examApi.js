@@ -27,6 +27,7 @@ route.get('/findOne/:id', (req, res) => {
     "points": 30,
     "classroom": "Raf6",
     "guard": "Marija"
+    "subjectId": 69
   }
 */
 
@@ -36,7 +37,8 @@ route.post('/add', (req, res) => {
         time: req.body.time,
         points: req.body.points,
         classroom: req.body.classroom,
-        guard: req.body.guard
+        guard: req.body.guard,
+        subjectId: req.body.subjectId
     })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );

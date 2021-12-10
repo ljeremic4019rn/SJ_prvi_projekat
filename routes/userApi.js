@@ -31,7 +31,8 @@ route.get('/findOne/:id', (req, res) => {
     "password": 2212222,
     "admin": true,
     "moderator": false,
-    "student": false
+    "student": false,
+    "facultyId": 69
   }
 */
 
@@ -45,7 +46,8 @@ route.post('/add', (req, res) => {
         password: req.body.password,
         admin: req.body.admin, 
         moderator: req.body.moderator,
-        student: req.body.student
+        student: req.body.student,
+        facultyId: req.body.facultyId
     })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );

@@ -31,6 +31,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      subjectId:{
+        type: DataTypes.INTEGER,//proveri
+        allowNull: false
+      },
 
       createdAt: {
         allowNull: false,
