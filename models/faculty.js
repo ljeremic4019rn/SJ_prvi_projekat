@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ User, Library }) {
       // define association here
-     this.hasMany(User, { foreignKey: 'facultyId', as: 'user' });
-     this.hasOne(Library, { foreignKey: 'facultyId', as: 'library' });
+     this.hasMany(User, { foreignKey: 'facultyId', as: 'user', onDelete: 'cascade', hooks: true  });
+     this.hasOne(Library, { foreignKey: 'facultyId', as: 'library', onDelete: 'cascade', hooks: true  });
     }
   };
   Faculty.init({
