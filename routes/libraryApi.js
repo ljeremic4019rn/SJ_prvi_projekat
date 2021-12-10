@@ -27,7 +27,7 @@ route.get('/findOne/:id', (req, res) => {
     "booknumber": "1200",
     "floor": 3,
     "working": true,
-    facultyId: 69
+    "facultyId": 69
   }
 */
 

@@ -23,7 +23,7 @@ route.get('/findOne/:id', (req, res) => {
 /*
   {
     "name": "knjiga",
-    "writer": "pisac,
+    "writer": "pisac",
     "genre": "romantika",
     "desciption": "dugacak opis knjige",
     "relesedate": "03/25/2015",
