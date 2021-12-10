@@ -23,11 +23,11 @@ route.get('/findOne/:id', (req, res) => {
 
 /*
 {
-      "name": "fakultet3",
+      "name": "fakultet",
       "dean": "marko",
       "accredited": true,
       "street": "ulica",
-      "startDate": "01.02.2000"
+      "startDate": 	"03/25/2015"
 }
 */
 

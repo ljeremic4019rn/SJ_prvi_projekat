@@ -23,12 +23,12 @@ route.get('/findOne/:id', (req, res) => {
 
 /*
   {
-    "name": "user",
-    "lastname": "aaaa",
-    "birthday": "01.03.2000",
-    "email": "luka@luka.com",
+    "name": "ime",
+    "lastname": "prezime",
+    "birthday": "03/25/2015",
+    "email": "ime@gmail.com",
     "username": "uniqueUsername",
-    "password": 2212222,
+    "password": password,
     "admin": true,
     "moderator": false,
     "student": false,

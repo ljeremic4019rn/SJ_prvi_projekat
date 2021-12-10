@@ -1,12 +1,12 @@
 const express = require('express');
-const { sequelize, Subject } = require('../models');//todo ovo proveri sa njegovim vid
+const { sequelize, Library } = require('../models');//todo ovo proveri sa njegovim vid
 const route = express.Router();//ovaj ruter dole exportujemo
 route.use(express.json());//da bi nam tumacio sadrzaj kao json
 route.use(express.urlencoded({ extended: true }));//kada budemo iz fron tend komunicirali da ume da protumaci podatke iz forme i da ih stavi u js obj
 
 
 route.get('/all',(req,res) => {
-    Subject.findAll()
+    Library.findAll()
         .then(rows => res.json(rows) )
         .catch(err => res.status(500).json(err));
 });
@@ -14,7 +14,7 @@ route.get('/all',(req,res) => {
 
 route.get('/findOne/:id', (req, res) => {
     console.log(req.params.username);
-    Subject.findOne({ where: { id: req.params.id } })
+    Library.findOne({ where: { id: req.params.id } })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
 
@@ -22,25 +22,23 @@ route.get('/findOne/:id', (req, res) => {
 
 /*
   {
-    "name": "predmet",
-    "professor": "profesor",
-    "assistent": "asist",
-    "year": 2,
-    "points": "8",
-    "facultyId": 69,
-    "userId": 69
+    "librarian": "bibliotekar",
+    "opentime": "11:00",
+    "booknumber": "1200",
+    "floor": 3,
+    "working": true,
+    facultyId: 69
   }
 */
 
 route.post('/add', (req, res) => {
-    Subject.create({ 
-        name: req.body.name, 
-        professor: req.body.professor,
-        assistent: req.body.assistent,
-        year: req.body.year,
-        points: req.body.points,
-        facultyId: req.body.facultyId,
-        userId: req.body.userId    
+    Library.create({ 
+        librarian: req.body.librarian, 
+        opentime: req.body.opentime,
+        booknumber: req.body.booknumber,
+        floor: req.body.floor,
+        working: req.body.working,
+        facultyId: req.body.facultyId  
     })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
@@ -48,15 +46,15 @@ route.post('/add', (req, res) => {
 });
 
 route.put('/update/:id', (req, res) => {
-    Subject.findOne({ where: { id: req.params.id } })
-        .then( sbj => {
-            sbj.name = req.body.name, 
-            sbj.professor = req.body.professor,
-            sbj.assistent = req.body.assistent,
-            sbj.year = req.body.year,
-            sbj.points = req.body.points 
+    Library.findOne({ where: { id: req.params.id } })
+        .then( lib => {
+            lib.librarian = req.body.librarian, 
+            lib.opentime = req.body.opentime,
+            lib.booknumber = req.body.booknumber,
+            lib.floor = req.body.floor,
+            lib.working = req.body.working 
 
-            sbj.save()
+            lib.save()
                 .then( rows => res.json(rows) )
                 .catch( err => res.status(500).json(err) );
         })
@@ -66,9 +64,9 @@ route.put('/update/:id', (req, res) => {
 
 route.delete('/delete/:id', (req, res) => {
 
-    Subject.findOne({ where: { id: req.params.id } })
-        .then( sbj => {
-            sbj.destroy()
+    Library.findOne({ where: { id: req.params.id } })
+        .then( lib => {
+            lib.destroy()
                 .then( rows => res.json(rows) )
                 .catch( err => res.status(500).json(err) );
         })
