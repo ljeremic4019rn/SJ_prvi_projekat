@@ -3,61 +3,70 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Faculty extends Model {
+  class Book extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User, Library }) {
+    static associate({ Library, User }) {
       // define association here
-     this.hasMany(User, { foreignKey: 'facultyId', as: 'user' });
-     this.hasOne(Library, { foreignKey: 'facultyId', as: 'library' });
+      this.belongsTo(Library, { foreignKey: 'libraryId', as: 'library' });
+      this.belongsTo(User, { foreignKey: 'userId', as: 'user' });
     }
   };
-  Faculty.init({
-    name:  {
+  Book.init({
+    name:{
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
       validate: {
         notEmpty: true,
         is: /^[a-zA-Z\s]*$/i
       }
     },
-    dean:  {
+    writer:{
       type: DataTypes.STRING,
       allowNull: false,
-      unique: false,
       validate: {
         notEmpty: true,
         is: /^[a-zA-Z\s]*$/i
       }
     },
-    accredited: {
-      type: DataTypes.BOOLEAN,
+    genre:{
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: false
+      validate: {
+        notEmpty: true,
+        is: /^[a-zA-Z\s]*$/i
+      }
     },
-    street: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: false,
-    validate: {
-      notEmpty: true,
-    }
+    desciption:{
+      type: DataTypes.STRING(2048),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      }
     },
-    startDate: {
+    relesedate:{
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notEmpty: true,
         isDate: true
       }
+    },
+    publisher:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        is: /^[a-zA-Z\s]*$/i
+      }
     }
+    
   }, {
     sequelize,
-    modelName: 'Faculty',
+    modelName: 'Book',
   });
-  return Faculty;
+  return Book;
 };
