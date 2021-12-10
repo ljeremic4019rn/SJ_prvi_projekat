@@ -6,7 +6,7 @@ route.use(express.urlencoded({ extended: true }));//kada budemo iz fron tend kom
 
 
 route.get('/all',(req,res) => {
-    User.findAll()
+    User.findAll({ include: ['faculty'] })
         .then(rows => res.json(rows) )
         .catch(err => res.status(500).json(err));
 });

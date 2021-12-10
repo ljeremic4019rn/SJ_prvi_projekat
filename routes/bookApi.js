@@ -6,7 +6,7 @@ route.use(express.urlencoded({ extended: true }));//kada budemo iz fron tend kom
 
 
 route.get('/all',(req,res) => {
-    Book.findAll()
+    Book.findAll({ include: ['library', 'user'] })
         .then(rows => res.json(rows) )
         .catch(err => res.status(500).json(err));
 });
@@ -41,7 +41,7 @@ route.post('/add', (req, res) => {
         desciption: req.body.desciption,
         relesedate: req.body.relesedate,
         publisher: req.body.publisher,
-        libraryId: req.body.publisher,
+        libraryId: req.body.libraryId,
         userId: req.body.userId
     })
         .then( rows => res.json(rows) )
