@@ -23,8 +23,8 @@ function getAllFaculties() {
         method: 'GET'
     })
     .then( res => res.json() )
-    .then( data => displayFields(data, 'fac'))
-    elementType = "fac"
+    .then( data => displayFields(data, 'faculty'))
+    elementType = "faculty"
 }
 
 function getAllLibraries() {
@@ -32,8 +32,8 @@ function getAllLibraries() {
         method: 'GET'
     })
     .then( res => res.json() )
-    .then( data => displayFields(data, 'lib'))
-    elementType = "lib"
+    .then( data => displayFields(data, 'library'))
+    elementType = "library"
 }
 
 function formDelete(){
@@ -154,7 +154,7 @@ function formAdd(){//todo
 
     const stringifiedData = JSON.stringify(jsonData)
 
-    fetch('http://127.0.0.1:8000/admin/book', {
+    fetch('http://127.0.0.1:8000/admin/' + elementType, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: stringifiedData
@@ -181,10 +181,10 @@ function updateListForOne(element, checker){
     else if (checker == 'user'){            
         parameters = `Id: ${element.id}: Cred: [${element.name} ${element.lastname}] Username: ${element.username}`
     }
-    else if (checker == 'fac'){
+    else if (checker == 'faculty'){
         parameters = `Id: ${element.id}: Name: ${element.name} Dean: ${element.dean} Street: ${element.street} `
     }
-    else if (checker == 'lib'){
+    else if (checker == 'library'){
         parameters = `Id: ${element.id}: Librarian: ${element.librarian} Opens at: ${element.opentime} Floor: ${element.floor} Currently open: ${element.working}   `
     }
 
@@ -211,10 +211,10 @@ function displayFields(data, checker){
         else if (checker == 'user'){            
             parameters = `Id: ${element.id}: Cred: [${element.name} ${element.lastname}] Username: ${element.username}`
         }
-        else if (checker == 'fac'){
+        else if (checker == 'faculty'){
             parameters = `Id: ${element.id}: Name: ${element.name} Dean: ${element.dean} Street: ${element.street} `
         }
-        else if (checker == 'lib'){
+        else if (checker == 'library'){
             parameters = `Id: ${element.id}: Librarian: ${element.librarian} Opens at: ${element.opentime} Floor: ${element.floor} Currently open: ${element.working}   `
         }
 
@@ -289,10 +289,10 @@ function updateList(checker){
     else if (checker == 'user'){    
         getAllUsers()        
     }
-    else if (checker == 'fac'){
+    else if (checker == 'faculty'){
         getAllFaculties()
     }
-    else if (checker == 'lib'){
+    else if (checker == 'library'){
          getAllLibraries() 
     }
 }
