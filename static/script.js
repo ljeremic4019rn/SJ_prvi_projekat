@@ -154,7 +154,7 @@ function formAdd(){//todo
 
     const stringifiedData = JSON.stringify(jsonData)
 
-    fetch('http://127.0.0.1:8000/admin/' + elementType, {
+    fetch('http://127.0.0.1:8000/admin/user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: stringifiedData

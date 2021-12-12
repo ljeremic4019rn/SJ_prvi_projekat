@@ -1,5 +1,5 @@
 const express = require('express');
-const { sequelize, User, Faculty, Library, Book } = require('./models');
+const { sequelize, User } = require('./models');
 const bcrypt = require('bcrypt');//za sifru
 const jwt = require('jsonwebtoken');
 const cors = require('cors');//da dozvolimo sa druge adrese da pristupamo rutama
@@ -8,62 +8,68 @@ require('dotenv').config();//prosledi objekat koji ima cnofig metodu, ne treba n
 const app = express();
 
 var corsOptions = {//competability
-    origin: 'http://127.0.0.1:8000',//ovo dozvoljava da ako si na ovoj adresi/portu da mozes da pozoves /register i /login
+    origin: '*',//ovo dozvoljava da ako si na ovoj adresi/portu da mozes da pozoves /register i /login
     optionsSuccessStatus: 200//povezao je app i app_auth tako da tehnicki imaju medjusobne funkcije
 }
 
 app.use(express.json());
 app.use(cors(corsOptions));
 
+
+module.exports = cors(corsOptions)
+
 app.post('/register', (req, res) => {
-    User.create({ 
-        name: req.body.name, 
-        lastname: req.body.lastname,//TODO tmp samo napravimo novog usera
-        birthday: req.body.birthday, 
-        email: req.body.email,
-        username: req.body.username, 
-        password: bcrypt.hashSync(req.body.password, 10),
-        admin: req.body.admin, 
-        moderator: req.body.moderator,
-        student: req.body.student,
-        facultyId: req.body.facultyId
-    })
-        .then( rows => {
+    console.log("u registru smo")
 
-            const userInfo = {//napravimo objekat sa user info
-                userId: rows.id,
-                username: rows.username
-            };
-            const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);//sifriramo informacije iz objekta
+    // User.create({ 
+    //     name: req.body.name, 
+    //     lastname: req.body.lastname,//TODO tmp samo napravimo novog usera
+    //     birthday: req.body.birthday, 
+    //     email: req.body.email,
+    //     username: req.body.username, 
+    //     password: bcrypt.hashSync(req.body.password, 10),
+    //     admin: req.body.admin, 
+    //     moderator: req.body.moderator,
+    //     student: req.body.student,
+    //     facultyId: req.body.facultyId
+    // })
+    //     .then( rows => {
+    //         const userInfo = {//napravimo objekat sa user info
+    //             userId: rows.id,
+    //             username: rows.username
+    //         };
+    //         const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);//sifriramo informacije iz objekta
+    //         res.json({ token: token }) //printamo to sto smo kriptovali
+    //     })
+    //     .catch( err => res.status(500).json(err) );
 
-            res.json({ token: token }) //printamo to sto smo kriptovali
-        })
-        .catch( err => res.status(500).json(err) );
 });
 
 app.post('/login', (req, res) => {
-    User.findOne({ where: { username: req.params.username } })//preko username cemo se logovati
-        .then( cryptedUser => {//password je kriptovan od kada smo se registrovali
+    console.log('Molim te')
 
-            if (bcrypt.compareSync(req.body.password, cryptedUser.password)){// uesenu sifru i dekriptovanu od usera i proveri
+    // User.findOne({ where: { username: req.params.username } })//preko username cemo se logovati
+    //     .then( cryptedUser => {//password je kriptovan od kada smo se registrovali
 
-                const userInfo = {//napravimo objekat sa user info
-                    userId: rows.id,
-                    username: rows.username
-                };
-                const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
+    //         if (bcrypt.compareSync(req.body.password, cryptedUser.password)){// uesenu sifru i dekriptovanu od usera i proveri
 
-                res.json({ token: token })
-            }
-            else{
-                res.status(400).json({ msg: 'Invalidna sifra' })
-            }
+    //             const userInfo = {//napravimo objekat sa user info
+    //                 userId: rows.id,
+    //                 username: rows.username
+    //             };
+    //             const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
+
+    //             res.json({ token: token })
+    //         }
+    //         else{
+    //             res.status(400).json({ msg: 'Invalidna sifra' })
+    //         }
              
-        })
-        .catch( err => res.status(500).json(err) );
+    //     })
+    //     .catch( err => res.status(500).json(err) );
 });
 
-app.listen({ port: 9000 }, async () => {//ba 9000 jer na 8000 vec imamo app.js
+app.listen({ port: 9000 }, async () => {//na 9000 jer na 8000 vec imamo app.js
     await sequelize.authenticate();
     console.log("povezan app za autentifikaciju");
 });

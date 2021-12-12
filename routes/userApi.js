@@ -1,5 +1,5 @@
 const express = require('express');
-const { sequelize, User } = require('../models');//todo ovo proveri sa njegovim vid
+const { sequelize, User } = require('../models');
 
 const route = express.Router();//ovaj ruter dole exportujemo
 route.use(express.json());//da bi nam tumacio sadrzaj kao json
@@ -26,7 +26,7 @@ function authToken(req, res, next) {
 
 
 route.get('/all',(req,res) => {
-    User.findAll({ include: ['faculty'] })
+User.findAll({/*include: ['faculty'] */})
         .then(rows => res.json(rows) )
         .catch(err => res.status(500).json(err));
 });
