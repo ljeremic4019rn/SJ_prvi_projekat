@@ -59,7 +59,7 @@ function formDelete(){
 }
 
 function findOneForm(){
-    const id = document.getElementById('searchBar').value
+    const id = document.getElementById('searchBar').value//!ovde moda da bude int
     //todo proveri da li je int
 
     fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
@@ -74,29 +74,48 @@ function findOneForm(){
       .catch(error => {
         console.error('Error:', error);
       });
-
-
 }
 
 function formUpdate(){//TODO popravi kasnije
     const form = document.getElementById('actualView')
     const data = new FormData(form)
     let id = 0
+    let counter = 0
+    let counterFix = 0
+    let tmp
     
-    for (let [key, value] of data.entries()){// logging the form
+    for (let [key, value] of data.entries()){//uzimamo id
         if (key == 'id'){
             id = value
         }
-        console.log(key, value)
     }
     console.log("id je", id)
+
+    for (let [key, value] of data.entries()){//brojim koliko polja ima u elementu
+        counterFix ++;
+    }
+    console.log('counter',counterFix);
    
+    tmp = "{"
+    for (let [key, value] of data.entries()){//RETARDIRAN SAM tako da ne umem da uzmem da ta, pa sam manuelno napravio json objkat od stringa
+        tmp += "\"" + key + "\":" + "\"" + value + "\"";
+        if (counter != counterFix-1){
+        tmp += ", "
+        }
+        counter ++
+    }
 
+    tmp += "}"
+    const jsonData = JSON.parse(tmp);
 
-    fetch('http://127.0.0.1:8000/admin/book/' + id,{
+    //console.log(jsonData)
+    const stringifiedData = JSON.stringify(jsonData)//mora u const da se stavi inace ne radi
+    //console.log(stringifiedData)
+
+    fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: stringifiedData
     })
     .then( res => res.json() )
     .then(result => {
@@ -108,40 +127,37 @@ function formUpdate(){//TODO popravi kasnije
 }
 
 function formAdd(){//todo 
-    const form = document.getElementById('actualView')
+    const form = document.getElementById('addView')
     const data = new FormData(form)
-    let counterFix = 0
+    let id = 0
     let counter = 0
+    let counterFix = 0
     let tmp
 
-    const datak = {
-        body: 'kruac',
-        userId: "kurac"
-    };
-
-    for (let [key, value] of data.entries()){// logging the form
+    for (let [key, value] of data.entries()){//brojim koliko polja ima u elementu
         counterFix ++;
     }
-    console.log('counter',counterFix);
-
+    //console.log('counter',counterFix);
+   
     tmp = "{"
-    for (let [key, value] of data.entries()){// logging the form
+    for (let [key, value] of data.entries()){//RETARDIRAN SAM tako da ne umem da uzmem da ta, pa sam manuelno napravio json objkat od stringa
         tmp += "\"" + key + "\":" + "\"" + value + "\"";
         if (counter != counterFix-1){
         tmp += ", "
         }
         counter ++
     }
+
     tmp += "}"
-
     const jsonData = JSON.parse(tmp);
-    //console.log('data',jsonData);
+    //console.log(jsonData)
 
-    fetch('http://192.168.0.143:8000/book/', {
+    const stringifiedData = JSON.stringify(jsonData)
+
+    fetch('http://127.0.0.1:8000/admin/book', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: jsonData
-
+        body: stringifiedData
     })
         .then( res => res.json() )
         .then(result => {
@@ -180,7 +196,6 @@ function updateListForOne(element, checker){
     lst.append(li)
     index += 1
 }
-
 
 
 function displayFields(data, checker){
@@ -248,13 +263,15 @@ function displayFields(data, checker){
 
             //todo napravi tmp input filed i uradi clonenode na njemu tako da izgleda lepo ako ti se da
             for (let [key] of Object.entries(element)){//upisujemo polja iz baze 
-                const name = document.createElement('span')//ime levo od input polja
-                name.innerHTML = `${key}: `//stavimo text u name polja
-                const tag = document.createElement('input')//input polje
-                tag.name = key
-                //tag.value = value
-                addView.appendChild(name)
-                addView.appendChild(tag)
+                if (key != "id" && key != "createdAt" && key != "updatedAt"){
+                    const name = document.createElement('span')//ime levo od input polja
+                    name.innerHTML = `${key}: `//stavimo text u name polja
+                    const tag = document.createElement('input')//input polje
+                    tag.name = key
+                    //tag.value = value
+                    addView.appendChild(name)
+                    addView.appendChild(tag)
+                }
             }
             addView.appendChild(addBtn)
             

@@ -34,7 +34,6 @@ route.get('/all',(req,res) => {
 
 
 route.get('/:id', (req, res) => {
-    console.log("barem smo usli")
     Book.findOne({ where: { id: req.params.id } })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
