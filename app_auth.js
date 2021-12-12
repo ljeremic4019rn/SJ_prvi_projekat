@@ -34,9 +34,9 @@ app.post('/register', (req, res) => {
                 userId: rows.id,
                 username: rows.username
             };
-            const cryptToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);//sifriramo informacije iz objekta
+            const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);//sifriramo informacije iz objekta
 
-            res.json({ token: cryptToken }) //printamo to sto smo kriptovali
+            res.json({ token: token }) //printamo to sto smo kriptovali
         })
         .catch( err => res.status(500).json(err) );
 });
@@ -51,9 +51,9 @@ app.post('/login', (req, res) => {
                     userId: rows.id,
                     username: rows.username
                 };
-                const cryptToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
+                const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
 
-                res.json({ token: cryptToken })
+                res.json({ token: token })
             }
             else{
                 res.status(400).json({ msg: 'Invalidna sifra' })

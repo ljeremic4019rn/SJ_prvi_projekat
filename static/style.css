@@ -1,0 +1,26 @@
+.btn-space {
+    margin-right: 50px;
+    padding: 15px 40px;
+}
+
+.topNavBarPushDown{
+    margin-bottom: 50px;
+}
+
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.vertical{
+    width: 50%;
+    margin-right: 50px;
+}
+
+.inLine{
+    margin: auto;
+    width: 200px;
+    /* display: inline; */
+}
+

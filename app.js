@@ -50,15 +50,15 @@ function authToken (req, res, next){//next je pokazivac na sledecu fukciju
 }
 
 app.get('/register', (req, res) => { //tmp, mozda da se skloni
-    res.sendFile('register.html', { root: './staticTMP' });
+    res.sendFile('register.html', { root: './static' });
 });
 
 app.get('/login', (req, res) => {
-    res.sendFile('login.html', { root: './staticTMP' });
+    res.sendFile('login.html', { root: './static' });
 });
 
-app.get('/', authToken, (req, res) => {//ovde smo middleware stavili jer stitimo tu putanju, ako nismo logovani preusmerava nas iznad na /login
-    res.sendFile('index.html', { root: './staticTMP' });
+app.get('/', /*authToken, */(req, res) => {//ovde smo middleware stavili jer stitimo tu putanju, ako nismo logovani preusmerava nas iznad na /login
+    res.sendFile('index.html', { root: './static' });
 });
 
 

@@ -21,19 +21,20 @@ function authToken(req, res, next) {
     });
 }
 
-route.use(authToken);//za sve rute radi autentifikaciju
+//route.use(authToken);//za sve rute radi autentifikaciju
 
 
 
 
 route.get('/all',(req,res) => {
-    Book.findAll({ include: ['library', 'user'] })
+    Book.findAll({ /*include: ['library', 'user']*/ })
         .then(rows => res.json(rows) )
         .catch(err => res.status(500).json(err));
 });
 
 
-route.get('/findOne/:id', (req, res) => {
+route.get('/:id', (req, res) => {
+    console.log("barem smo usli")
     Book.findOne({ where: { id: req.params.id } })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
@@ -53,7 +54,8 @@ route.get('/findOne/:id', (req, res) => {
   }
 */
 
-route.post('/add', (req, res) => {
+route.post('/', (req, res) => {
+    console.log("ovde smo")
     Book.create({ 
         name: req.body.name,
         writer: req.body.writer,
@@ -69,7 +71,7 @@ route.post('/add', (req, res) => {
 
 });
 
-route.put('/update/:id', (req, res) => {
+route.put('/:id', (req, res) => {
     Book.findOne({ where: { id: req.params.id } })
         .then( book => {
             book.name = req.body.name,
@@ -87,7 +89,7 @@ route.put('/update/:id', (req, res) => {
 
 });
 
-route.delete('/delete/:id', (req, res) => {
+route.delete('/:id', (req, res) => {
     Book.findOne({ where: { id: req.params.id } })
         .then( book => {
             book.destroy()

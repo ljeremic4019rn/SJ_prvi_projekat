@@ -21,7 +21,7 @@ function authToken(req, res, next) {
     });
 }
 
-route.use(authToken);//za sve rute radi autentifikaciju
+//route.use(authToken);//za sve rute radi autentifikaciju
 
 
 
@@ -32,7 +32,7 @@ route.get('/all',(req,res) => {
 });
 
 
-route.get('/findOne/:id', (req, res) => {
+route.get('/:id', (req, res) => {
     User.findOne({ where: { id: req.params.id } })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
@@ -54,7 +54,7 @@ route.get('/findOne/:id', (req, res) => {
   }
 */
 
-route.post('/add', (req, res) => {
+route.post('/', (req, res) => {
     User.create({ 
         name: req.body.name, 
         lastname: req.body.lastname,
@@ -72,7 +72,7 @@ route.post('/add', (req, res) => {
 
 });
 
-route.put('/update/:id', (req, res) => {
+route.put('/:id', (req, res) => {
     User.findOne({ where: { id: req.params.id } })
         .then( usr => {
             usr.name = req.body.name, 
@@ -93,7 +93,7 @@ route.put('/update/:id', (req, res) => {
 
 });
 
-route.delete('/delete/:id', (req, res) => {
+route.delete('/:id', (req, res) => {
     User.findOne({ where: { id: req.params.id } })
         .then( usr => {
             usr.destroy()
