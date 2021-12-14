@@ -6,10 +6,9 @@ const facultyapi = require('./routes/facultyApi');
 const libraryapi = require('./routes/libraryApi');
 const bookapi = require('./routes/bookApi');
 
-//const auth = require('./routes/auth');
-
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const { raw } = require('express');
 require('dotenv').config();
 
 const app = express();
@@ -18,13 +17,13 @@ app.use('/admin/user', userapi);
 app.use('/admin/faculty', facultyapi);
 app.use('/admin/library', libraryapi);
 app.use('/admin/book', bookapi);
-//app.use('/auth', auth);
 
 function getCookies(req) {
     if (req.headers.cookie == null) return {};
 
     const rawCookies = req.headers.cookie.split('; ');//podaci u cookie su razdvojeni sa ;
     const parsedCookies = {};
+    // console.log('raw',rawCookies);
 
     rawCookies.forEach( rawCookie => {
         const parsedCookie = rawCookie.split('=');//dobijamo ime i vr ednost svakog cookia 
@@ -36,6 +35,7 @@ function getCookies(req) {
 
 function authToken(req, res, next) {//ovo je middleware koji proverava da li je user ulogovan ili ne
     const cookies = getCookies(req); //next je pokazivac na sledecu funkciju
+    console.log('cookie',cookies);
     const token = cookies['token'];//iz cookia dohavatamo token, ['element nekog objekta']
   
     if (token == null) return res.redirect(301, '/login');

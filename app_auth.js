@@ -53,7 +53,7 @@ app.post('/login', (req, res) => {
 
                 const userInfo = {//napravimo objekat sa user info
                     userId: cryptedUser.id,
-                    username: cryptedUser.username
+                    username: cryptedUser.username 
                 };
                 const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
 

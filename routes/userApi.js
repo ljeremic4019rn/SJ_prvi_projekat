@@ -1,32 +1,18 @@
 const express = require('express');
 const { sequelize, User } = require('../models');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const route = express.Router();//ovaj ruter dole exportujemo
 route.use(express.json());//da bi nam tumacio sadrzaj kao json
 route.use(express.urlencoded({ extended: true }));//kada budemo iz fron tend komunicirali da ume da protumaci podatke iz forme i da ih stavi u js obj
 
-function getCookies(req) {
-    if (req.headers.cookie == null) return {};
-
-    const rawCookies = req.headers.cookie.split('; ');//podaci u cookie su razdvojeni sa ;
-    const parsedCookies = {};
-
-    rawCookies.forEach( rawCookie => {
-        const parsedCookie = rawCookie.split('=');//dobijamo ime i vr ednost svakog cookia 
-        parsedCookies[parsedCookie[0]] = parsedCookie[1];
-    });
-
-    return parsedCookies;
-}; 
-
-
 function authToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    console.log("kurac ",authHeader);
     const token = authHeader && authHeader.split(' ')[1];
   
-    if (token == null) return res.status(401).json({ msg: err });
-  
+    if (token == null) return res.status(401).json({ msg: "err" });
+
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     
         if (err) return res.status(403).json({ msg: err });
@@ -36,10 +22,8 @@ function authToken(req, res, next) {
         next();
     });
 }
+  route.use(authToken);
 
-console.log(route);
-
-route.use(authToken);//za sve rute treba autentifikacija, zato cela klasa koristi funkciju, da bi se za svaku funkicju uvek pokrenula
 
 
 

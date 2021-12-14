@@ -1,7 +1,14 @@
 let elementType
+const cookies = document.cookie.split('=');
+const token = cookies[cookies.length - 1];
+
+
 
 function getAllBooks() {
     fetch('http://127.0.0.1:8000/admin/book/all',{
+        headers: {
+            'authorization': `Bearer ${token}`
+        },
         method: 'GET'
     })
         .then( res => res.json() )
@@ -11,6 +18,9 @@ function getAllBooks() {
 
 function getAllUsers() {
     fetch('http://127.0.0.1:8000/admin/user/all',{
+        headers: {
+            'authorization': `Bearer ${token}`
+        },
         method: 'GET'
     })
     .then( res => res.json() )
@@ -20,6 +30,9 @@ function getAllUsers() {
 
 function getAllFaculties() {
     fetch('http://127.0.0.1:8000/admin/faculty/all',{
+        headers: {
+            'authorization': `Bearer ${token}`
+        },
         method: 'GET'
     })
     .then( res => res.json() )
@@ -29,6 +42,9 @@ function getAllFaculties() {
 
 function getAllLibraries() {
     fetch('http://127.0.0.1:8000/admin/library/all',{
+        headers: {
+            'authorization': `Bearer ${token}`
+        },
         method: 'GET'
     })
     .then( res => res.json() )
@@ -47,6 +63,9 @@ function formDelete(){
     }
 
     fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
+        headers: {
+            'authorization': `Bearer ${token}`
+        },
         method: 'DELETE',
     })
     .then( res => res.json() )
@@ -63,6 +82,9 @@ function findOneForm(){
     //todo proveri da li je int
 
     fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
+        headers: {
+            'authorization': `Bearer ${token}`
+        },
         method: 'GET',
     })
     .then( res => res.json() )
@@ -89,12 +111,12 @@ function formUpdate(){//TODO popravi kasnije
             id = value
         }
     }
-    console.log("id je", id)
+    // console.log("id je", id)
 
     for (let [key, value] of data.entries()){//brojim koliko polja ima u elementu
         counterFix ++;
     }
-    console.log('counter',counterFix);
+    // console.log('counter',counterFix);
    
     tmp = "{"
     for (let [key, value] of data.entries()){//RETARDIRAN SAM tako da ne umem da uzmem da ta, pa sam manuelno napravio json objkat od stringa
@@ -112,14 +134,19 @@ function formUpdate(){//TODO popravi kasnije
     const stringifiedData = JSON.stringify(jsonData)//mora u const da se stavi inace ne radi
     //console.log(stringifiedData)
 
+
     fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json' ,
+            'authorization': `Bearer ${token}`
+        },
         body: stringifiedData
     })
     .then( res => res.json() )
     .then(result => {
         console.log('Success:', result);
+        updateList(elementType)
       })
       .catch(error => {
         console.error('Error:', error);
@@ -154,14 +181,18 @@ function formAdd(){//todo
 
     const stringifiedData = JSON.stringify(jsonData)
 
-    fetch('http://127.0.0.1:8000/admin/user', {
+    fetch('http://127.0.0.1:8000/admin/' + elementType, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+              'authorization': `Bearer ${token}` 
+            },
         body: stringifiedData
     })
         .then( res => res.json() )
         .then(result => {
-            console.log('Success:', result);
+            console.log('Success:', result)
+            updateList(elementType) //!ovo napravi da raid
           })
           .catch(error => {
             console.error('Error:', error);
@@ -172,7 +203,7 @@ function updateListForOne(element, checker){
     const lst = document.getElementById('elementList');
     lst.innerHTML = "";//praznimo listu pre ponovnog loadovanja
     let index = 1
-    console.log('data = ', element)
+    // console.log('data = ', element)
 
     let parameters; //parametri iz elementa
     if (checker == 'book'){
@@ -209,7 +240,7 @@ function displayFields(data, checker){
             parameters = `Id: ${element.id}: Name: ${element.name} Writer:${element.writer} Genre: ${element.genre} Publisher: ${element.publisher} `
         }
         else if (checker == 'user'){            
-            parameters = `Id: ${element.id}: Cred: [${element.name} ${element.lastname}] Username: ${element.username}`
+            parameters = `Id: ${element.id}: Credentials:  -${element.name} ${element.lastname}- Username: ${element.username}`
         }
         else if (checker == 'faculty'){
             parameters = `Id: ${element.id}: Name: ${element.name} Dean: ${element.dean} Street: ${element.street} `
@@ -261,7 +292,6 @@ function displayFields(data, checker){
             viewForm.appendChild(submit)
             view.appendChild(viewForm)
 
-            //todo napravi tmp input filed i uradi clonenode na njemu tako da izgleda lepo ako ti se da
             for (let [key] of Object.entries(element)){//upisujemo polja iz baze 
                 if (key != "id" && key != "createdAt" && key != "updatedAt"){
                     const name = document.createElement('span')//ime levo od input polja
