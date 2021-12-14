@@ -28,7 +28,7 @@ function authToken(req, res, next) {
 
 
 route.get('/all',(req,res) => {
-User.findAll({/*include: ['faculty'] */})
+    User.findAll({/*include: ['faculty'] */})
         .then(rows => res.json(rows) )
         .catch(err => res.status(500).json(err));
 });

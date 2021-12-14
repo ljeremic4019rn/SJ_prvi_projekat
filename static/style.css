@@ -15,12 +15,9 @@
 
 .vertical{
     width: 50%;
-    margin-right: 50px;
 }
 
-.inLine{
-    margin: auto;
-    width: 200px;
-    /* display: inline; */
+.formRow{
+    display: flex;
+    justify-content: space-evenly;
 }
-

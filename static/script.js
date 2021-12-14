@@ -3,7 +3,6 @@ const cookies = document.cookie.split('=');
 const token = cookies[cookies.length - 1];
 
 
-
 function getAllBooks() {
     fetch('http://127.0.0.1:8000/admin/book/all',{
         headers: {
@@ -23,9 +22,9 @@ function getAllUsers() {
         },
         method: 'GET'
     })
-    .then( res => res.json() )
-    .then( data => displayFields(data, 'user'))
-    elementType = "user"
+        .then( res => res.json() )
+        .then( data => displayFields(data, 'user'))
+        elementType = "user"
 }
 
 function getAllFaculties() {
@@ -101,41 +100,16 @@ function findOneForm(){
 function formUpdate(){//TODO popravi kasnije
     const form = document.getElementById('actualView')
     const data = new FormData(form)
-    let id = 0
-    let counter = 0
-    let counterFix = 0
-    let tmp
-    
-    for (let [key, value] of data.entries()){//uzimamo id
-        if (key == 'id'){
-            id = value
-        }
-    }
-    // console.log("id je", id)
 
-    for (let [key, value] of data.entries()){//brojim koliko polja ima u elementu
-        counterFix ++;
-    }
-    // console.log('counter',counterFix);
-   
-    tmp = "{"
-    for (let [key, value] of data.entries()){//RETARDIRAN SAM tako da ne umem da uzmem da ta, pa sam manuelno napravio json objkat od stringa
-        tmp += "\"" + key + "\":" + "\"" + value + "\"";
-        if (counter != counterFix-1){
-        tmp += ", "
-        }
-        counter ++
+    let obj = {}
+    for (let [key, value] of data.entries()){
+        obj[key] = value
     }
 
-    tmp += "}"
-    const jsonData = JSON.parse(tmp);
-
-    //console.log(jsonData)
-    const stringifiedData = JSON.stringify(jsonData)//mora u const da se stavi inace ne radi
-    //console.log(stringifiedData)
+    const stringifiedData = JSON.stringify(obj)//mora u const da se stavi inace ne radi
 
 
-    fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
+    fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ obj.id,{
         method: 'PUT',
         headers: { 
             'Content-Type': 'application/json' ,
@@ -230,6 +204,7 @@ function updateListForOne(element, checker){
 
 
 function displayFields(data, checker){
+    console.log(data)
     const lst = document.getElementById('elementList');
     lst.innerHTML = "";//praznimo listu pre ponovnog loadovanja
     let index = 1;
@@ -261,9 +236,7 @@ function displayFields(data, checker){
             while(view.lastElementChild){//ocistimo polja od prethodnog elementa
                 view.removeChild(view.lastElementChild)
             }
-            while(addView.lastElementChild){//ocistimo polja od prethodnog elementa
-                addView.removeChild(addView.lastElementChild)
-            }
+
             view.hidden = false//jer su helper elementi id onda ih kopiramo i kazemo da vise nisu hidden
 
             const viewForm = document.getElementById("bookRowForm").cloneNode(true)
@@ -275,14 +248,20 @@ function displayFields(data, checker){
             viewForm.removeChild(submit)
 
             for (let [key, value] of Object.entries(element)){//upisujemo polja iz baze
-                const name = document.createElement('span')//ime levo od input polja
+                const row = document.getElementById('even').cloneNode(true)
+                row.id = `row ${index}`
+                const name = row.children[0]
+                const inputWrapper = row.children[1]
+                // const name = document.createElement('span')//ime levo od input polja
                 name.innerHTML = `${key}: `//stavimo text u name polja
-                const tag = document.createElement('input')//input polje
-                tag.name = key
-                tag.value = value
-                viewForm.appendChild(name)
-                viewForm.appendChild(tag)
-                viewForm.appendChild(document.createElement('br'))
+                name.id = `name ${index}`
+                inputWrapper.id = `wrapper ${index}`
+                const inputValue = document.createElement('input')//input polje
+                inputValue.name = key
+                inputValue.value = value
+                inputWrapper.appendChild(inputValue)
+                viewForm.appendChild(row)
+                // viewForm.appendChild(document.createElement('br'))
             }
             // viewForm.childNodes[1].value = element.name //get element by id (key is )
             viewForm.appendChild(submit)
@@ -295,7 +274,8 @@ function displayFields(data, checker){
 }
 
 function showAddFields(){
-    
+
+    window.location.href = 'addGui/addUser.html'
 }
 
 

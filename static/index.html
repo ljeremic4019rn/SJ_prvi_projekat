@@ -21,7 +21,7 @@
             <button type="button"  onclick="getAllLibraries()" class="btn-secondary btn-space">Library</button>
             <button  type="button" onclick="getAllBooks()" class="btn-secondary btn-space">Books</button>
             <button type="button"  onclick="getAllUsers()" class="btn-secondary btn-space">Users</button>
-            <button type="button"  onclick="getAllUsers()" class="btn-secondary btn-space">Users</button>
+            <button type="button"  onclick="showAddFields()" class=" btn-add">Add Element</button>
             <div>
                 <input id = "searchBar" type="text" placeholder="Search element by Id">
                 <button type="button"  onclick="findOneForm()" class="btn">search</button>
@@ -33,7 +33,7 @@
         </div>
 
         <div class="container topNavBarPushDown ">
-            <span class="vertical">
+            <span class="vertical" style="margin-right: 50px;">
                 <ul id="elementList">  
                     <!-- lista elementata iz baze  -->
                 </ul>
@@ -44,15 +44,12 @@
             </span>
         </div>
 
-        <div class="inLine">
-            <form  id="addView">  
-                <!-- <span id="addView" /> -->
-            </form>
-            <input hidden id="addbtn" type="button" value="add" onclick="formAdd()">
-        </div>
-
         
         <li id="row" hidden></li>
+        <div id="even" class="formRow">
+            <span class="vertical" style="width: 20%;"></span>
+            <span class="vertical"></span>
+        </span>
         <form id='bookRowForm' method="PUT" action="/endpoint" hidden>
              <span id="inputs" />
              <input id="submitBtn" type="button" value="update" onclick="formUpdate()">
