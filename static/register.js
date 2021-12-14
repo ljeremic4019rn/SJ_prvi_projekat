@@ -4,16 +4,17 @@ function init() {
         e.preventDefault();
 
         const data = {
-            name: "ime",
-            lastname: "pregfhjzime",
-            birthday: "03/25/2015",
-            email: "bb@gmail.com",
-            username: "bb",
-            password: "bb",
-            admin: true,
-            moderator: false,
-            student: false,
-            facultyId: 2
+            name: document.getElementById('first_name').value,
+            lastname: document.getElementById('last_name').value,
+            birthday: document.getElementById('birth_date').value,
+            email: document.getElementById('email').value,
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            admin: document.getElementById('admin').value,
+            moderator: document.getElementById('moderator').value,
+            student: document.getElementById('student').value,
+            facultyId:  document.getElementById('facultyid').value
+
         };
 
         fetch('http://127.0.0.1:9000/register', {

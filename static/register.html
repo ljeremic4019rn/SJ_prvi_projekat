@@ -16,22 +16,46 @@
                 <div class="col">
                     <form method="post" action="/register">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name">
+                            <label for="first_name" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name">
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
-                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                            <label for="last_name" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="birth_date" class="form-label">Birth date</label>
+                            <input type="date" class="form-control" id="birth_date" name="birth_date">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" name="password">
                         </div>
+                        <div class="mb-3">
+                            <label for="facultyid" class="form-label">Faculty id</label>
+                            <input type="number" class="form-control" id="facultyid" name="facultyid">
+                        </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="admin" name="admin">
                             <label class="form-check-label" for="admin">Admin</label>
                         </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="moderator" name="moderator">
+                            <label class="form-check-label" for="moderator">Moderator</label>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="student" name="student">
+                            <label class="form-check-label" for="student">Student</label>
+                        </div>
+
                         <button type="submit" class="btn btn-primary" id="btn">Submit</button>
                     </form>
                 </div>

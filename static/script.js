@@ -232,7 +232,7 @@ function updateListForOne(element, checker){
 function displayFields(data, checker){
     const lst = document.getElementById('elementList');
     lst.innerHTML = "";//praznimo listu pre ponovnog loadovanja
-    let index = 1
+    let index = 1;
     data.forEach(element => {//el = json obj (1 book)
 
         let parameters; //parametri iz elementa
@@ -257,9 +257,6 @@ function displayFields(data, checker){
 
         li.onclick = event => {
             const view = document.getElementById("formView")
-            const addView = document.getElementById("addView")
-            const addBtn = document.getElementById("addbtn")
-
 
             while(view.lastElementChild){//ocistimo polja od prethodnog elementa
                 view.removeChild(view.lastElementChild)
@@ -268,7 +265,6 @@ function displayFields(data, checker){
                 addView.removeChild(addView.lastElementChild)
             }
             view.hidden = false//jer su helper elementi id onda ih kopiramo i kazemo da vise nisu hidden
-            addBtn.hidden = false
 
             const viewForm = document.getElementById("bookRowForm").cloneNode(true)
             viewForm.id = 'actualView'
@@ -292,23 +288,14 @@ function displayFields(data, checker){
             viewForm.appendChild(submit)
             view.appendChild(viewForm)
 
-            for (let [key] of Object.entries(element)){//upisujemo polja iz baze 
-                if (key != "id" && key != "createdAt" && key != "updatedAt"){
-                    const name = document.createElement('span')//ime levo od input polja
-                    name.innerHTML = `${key}: `//stavimo text u name polja
-                    const tag = document.createElement('input')//input polje
-                    tag.name = key
-                    //tag.value = value
-                    addView.appendChild(name)
-                    addView.appendChild(tag)
-                }
-            }
-            addView.appendChild(addBtn)
-            
         }
         lst.append(li)
         index += 1
     }); 
+}
+
+function showAddFields(){
+    
 }
 
 

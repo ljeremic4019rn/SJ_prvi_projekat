@@ -4,7 +4,7 @@ function init() {
         e.preventDefault();
 
         const data = {
-            username: document.getElementById('name').value,
+            username: document.getElementById('username').value,
             password: document.getElementById('password').value
         };
         
