@@ -19,8 +19,6 @@ function init() {
                     alert(el.msg, 'ovo je error msg');
                 } else {
                     document.cookie = `token=${el.token};SameSite=Lax`;
-                    //  console.log('cookie',document.cookie);
-                    // console.log('cookie',el.token);
                     window.location.href = 'index.html';
                 }
             });

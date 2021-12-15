@@ -1,4 +1,5 @@
 let elementType
+let globalAdd
 const cookies = document.cookie.split('=');
 const token = cookies[cookies.length - 1];
 
@@ -12,7 +13,11 @@ function getAllBooks() {
     })
         .then( res => res.json() )
         .then( data => displayFields(data, 'book'))
+
         elementType = "book"
+        globalAdd = "addBook"
+        const view = document.getElementById("formView")
+        clearFields(view)
 }
 
 function getAllUsers() {
@@ -24,7 +29,11 @@ function getAllUsers() {
     })
         .then( res => res.json() )
         .then( data => displayFields(data, 'user'))
+
         elementType = "user"
+        globalAdd = "addUser"
+        const view = document.getElementById("formView")
+        clearFields(view)
 }
 
 function getAllFaculties() {
@@ -36,7 +45,11 @@ function getAllFaculties() {
     })
     .then( res => res.json() )
     .then( data => displayFields(data, 'faculty'))
+
     elementType = "faculty"
+    globalAdd = "addFaculty"
+    const view = document.getElementById("formView")
+    clearFields(view)
 }
 
 function getAllLibraries() {
@@ -48,7 +61,11 @@ function getAllLibraries() {
     })
     .then( res => res.json() )
     .then( data => displayFields(data, 'library'))
+
     elementType = "library"
+    globalAdd = "addLibrary"
+    const view = document.getElementById("formView")
+    clearFields(view)
 }
 
 function formDelete(){
@@ -108,7 +125,6 @@ function formUpdate(){//TODO popravi kasnije
 
     const stringifiedData = JSON.stringify(obj)//mora u const da se stavi inace ne radi
 
-
     fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ obj.id,{
         method: 'PUT',
         headers: { 
@@ -127,51 +143,42 @@ function formUpdate(){//TODO popravi kasnije
       });
 }
 
-function formAdd(){//todo 
-    const form = document.getElementById('addView')
+function formAdd(elem,formName){
+    const form = document.getElementById(formName)
     const data = new FormData(form)
-    let id = 0
-    let counter = 0
-    let counterFix = 0
-    let tmp
 
-    for (let [key, value] of data.entries()){//brojim koliko polja ima u elementu
-        counterFix ++;
-    }
-    //console.log('counter',counterFix);
-   
-    tmp = "{"
-    for (let [key, value] of data.entries()){//RETARDIRAN SAM tako da ne umem da uzmem da ta, pa sam manuelno napravio json objkat od stringa
-        tmp += "\"" + key + "\":" + "\"" + value + "\"";
-        if (counter != counterFix-1){
-        tmp += ", "
-        }
-        counter ++
+    console.log(elem);
+    console.log(formName);
+
+    let obj = {}
+    for (let [key, value] of data.entries()){
+        obj[key] = value
+         console.log("kay",key);
+         console.log("val",value);
     }
 
-    tmp += "}"
-    const jsonData = JSON.parse(tmp);
-    //console.log(jsonData)
 
-    const stringifiedData = JSON.stringify(jsonData)
+    const stringifiedData = JSON.stringify(obj)//mora u const da se stavi inace ne radi
 
-    fetch('http://127.0.0.1:8000/admin/' + elementType, {
+    fetch('http://127.0.0.1:8000/admin/' + elem,{
         method: 'POST',
         headers: { 
-            'Content-Type': 'application/json',
-              'authorization': `Bearer ${token}` 
-            },
+            'Content-Type': 'application/json' ,
+            'authorization': `Bearer ${token}`
+        },
         body: stringifiedData
     })
-        .then( res => res.json() )
-        .then(result => {
-            console.log('Success:', result)
-            updateList(elementType) //!ovo napravi da raid
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
+    .then( res => res.json() )
+    .then(result => {
+        console.log('Success:', result);
+        updateList(elementType)
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
+
+
 
 function updateListForOne(element, checker){
     const lst = document.getElementById('elementList');
@@ -202,7 +209,6 @@ function updateListForOne(element, checker){
     index += 1
 }
 
-
 function displayFields(data, checker){
     console.log(data)
     const lst = document.getElementById('elementList');
@@ -231,11 +237,9 @@ function displayFields(data, checker){
         li.innerHTML = parameters
 
         li.onclick = event => {
-            const view = document.getElementById("formView")
 
-            while(view.lastElementChild){//ocistimo polja od prethodnog elementa
-                view.removeChild(view.lastElementChild)
-            }
+            const view = document.getElementById("formView")
+            clearFields(view)
 
             view.hidden = false//jer su helper elementi id onda ih kopiramo i kazemo da vise nisu hidden
 
@@ -266,6 +270,7 @@ function displayFields(data, checker){
             // viewForm.childNodes[1].value = element.name //get element by id (key is )
             viewForm.appendChild(submit)
             view.appendChild(viewForm)
+            document.getElementById('row2').readOnly = true
 
         }
         lst.append(li)
@@ -273,11 +278,15 @@ function displayFields(data, checker){
     }); 
 }
 
-function showAddFields(){
-
-    window.location.href = 'addGui/addUser.html'
+function clearFields(view){
+                while(view.lastElementChild){//ocistimo polja od prethodnog elementa
+                view.removeChild(view.lastElementChild)
+            }
 }
 
+function showAddFields(){
+    window.location.href = 'addGui/'+ globalAdd + '.html'
+}
 
 function updateList(checker){
     if (checker == 'book'){

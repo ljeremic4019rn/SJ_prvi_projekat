@@ -24,9 +24,12 @@ function init() {
         })
             .then( res => res.json() )
             .then( el => {
-                document.cookie = `token=${el.token};SameSite=Lax`;
-                // console.log('cookie',el.token);
-                window.location.href = 'index.html';
+                if (el.msg) {
+                    alert(el.msg, 'ovo je error msg');
+                } else {
+                    document.cookie = `token=${el.token};SameSite=Lax`;
+                    window.location.href = 'index.html';
+                }
             });
     });
 }

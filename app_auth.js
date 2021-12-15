@@ -40,7 +40,7 @@ app.post('/register', (req, res) => {
             const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);//sifriramo informacije iz objekta
             res.json({ token: token }) //printamo to sto smo kriptovali
         })
-        .catch( err => res.status(500).json(err) );
+        .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );
 });
 
 app.post('/login', (req, res) => {
@@ -61,10 +61,10 @@ app.post('/login', (req, res) => {
             // res.json(cryptedUser)
             }
             else{
-                res.status(400).json({ msg: 'Invalidna sifra' })
+                res.status(400).json({ msg: 'Lose uneseni username ili sifra' })
             }
         })
-        .catch( err => res.status(500).json(err), console.log("greska") );
+        .catch( err => res.status(500).json({ msg: 'Lose uneseni username ili sifra' }));
 });
 
 app.listen({ port: 9000 }, async () => {//na 9000 jer na 8000 vec imamo app.js
