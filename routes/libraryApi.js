@@ -62,6 +62,8 @@ route.post('/', (req, res) => {
     })
         .then( rows => res.json(rows) )
         .catch( err => res.status(500).json(err) );
+    // .then( rows => res.json(rows) )
+    // .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );//todo saznaj zasto baza error ako nemas cekiran working
 
 });
 

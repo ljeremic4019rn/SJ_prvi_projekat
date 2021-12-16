@@ -14,6 +14,7 @@ function init() {
             body: JSON.stringify(data)
         })
             .then( res => res.json() )
+
             .then( el => {
                 if (el.msg) {
                     alert(el.msg, 'ovo je error msg');

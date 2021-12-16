@@ -65,8 +65,8 @@ route.post('/', (req, res) => {
         libraryId: req.body.libraryId,
         userId: req.body.userId
     })
-        .then( rows => res.json(rows) )
-        .catch( err => res.status(500).json(err) );
+    .then( rows => res.json(rows) )
+    .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );
 
 });
 

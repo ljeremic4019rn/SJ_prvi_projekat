@@ -1,5 +1,5 @@
 let elementType
-let globalAdd
+let globalAdd = null
 const cookies = document.cookie.split('=');
 const token = cookies[cookies.length - 1];
 
@@ -168,14 +168,22 @@ function formAdd(elem,formName){
         },
         body: stringifiedData
     })
+    // .then( res => res.json() )
+    // .then(result => {
+    //     console.log('Success:', result);
+    //     updateList(elementType)
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
     .then( res => res.json() )
-    .then(result => {
-        console.log('Success:', result);
-        updateList(elementType)
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    .then( el => {
+        if (el.msg) {
+            alert(el.msg, 'ovo je error msg');
+        } else {
+            updateList(elementType)
+        }
+    });
 }
 
 
@@ -270,7 +278,6 @@ function displayFields(data, checker){
             // viewForm.childNodes[1].value = element.name //get element by id (key is )
             viewForm.appendChild(submit)
             view.appendChild(viewForm)
-            document.getElementById('row2').readOnly = true
 
         }
         lst.append(li)
@@ -285,7 +292,14 @@ function clearFields(view){
 }
 
 function showAddFields(){
-    window.location.href = 'addGui/'+ globalAdd + '.html'
+    if (globalAdd == null){
+        alert("Please select a database element");
+       
+    }
+    else{
+        window.location.href = 'addGui/'+ globalAdd + '.html'
+
+    }
 }
 
 function updateList(checker){

@@ -61,8 +61,10 @@ route.post('/', (req, res) => {
         street:  req.body.street,
         startDate:  req.body.startDate
     })
+        // .then( rows => res.json(rows) )
+        // .catch( err => res.status(500).json(err) );
         .then( rows => res.json(rows) )
-        .catch( err => res.status(500).json(err) );
+        .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );
 
 });
 

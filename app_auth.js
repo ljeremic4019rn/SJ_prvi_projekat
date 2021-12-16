@@ -3,6 +3,7 @@ const { sequelize, User } = require('./models');
 const bcrypt = require('bcrypt');//za sifru
 const jwt = require('jsonwebtoken');
 const cors = require('cors');//da dozvolimo sa druge adrese da pristupamo rutama
+const Joi = require('joi');
 require('dotenv').config();//prosledi objekat koji ima cnofig metodu, ne treba nam vise zato nije static 
 
 const app = express();
@@ -18,7 +19,6 @@ app.use(cors(corsOptions));
 
 
 app.post('/register', (req, res) => {
-    console.log("u registru smo")
 
     User.create({ 
         name: req.body.name, 
@@ -44,7 +44,6 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    console.log('u log in smo')
 
     User.findOne({ where: { username: req.body.username } })
         .then( cryptedUser => { 

@@ -69,8 +69,8 @@ route.post('/', (req, res) => {
         student: req.body.student,
         facultyId: req.body.facultyId
     })
-        .then( rows => res.json(rows) )
-        .catch( err => res.status(500).json(err) );
+    .then( rows => res.json(rows) )
+    .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );
 
 });
 
