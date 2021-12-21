@@ -165,6 +165,19 @@ function formAdd(elem,formName){
          console.log("val",value);
     }
 
+    if (elem == 'user'){
+        globalAdd = "addUser"
+    }
+    else if(elem == 'book'){
+        globalAdd = "addBook"
+    }
+    else if(elem == 'library'){
+        globalAdd = "addLibrary"
+    }
+    else if(elem == 'faculty'){
+        globalAdd = "addFaculty"
+    }
+
 
     const stringifiedData = JSON.stringify(obj)//mora u const da se stavi inace ne radi
 
@@ -191,7 +204,7 @@ function formAdd(elem,formName){
             alert(el.msg, 'ovo je error msg');
         } else {
             updateList(elementType)
-            
+            showAddFields(1)
         }
     });
 }
@@ -301,14 +314,17 @@ function clearFields(view){
             }
 }
 
-function showAddFields(){
+function showAddFields(int){
     if (globalAdd == null){
         alert("Please select a database element");
-       
+    }
+    else if (int == 1){
+        console.log("herf ",window.location.href)
+        window.location.href = globalAdd + '.html'
     }
     else{
+        console.log("herf ",window.location.href)
         window.location.href = 'addGui/'+ globalAdd + '.html'
-
     }
 }
 
