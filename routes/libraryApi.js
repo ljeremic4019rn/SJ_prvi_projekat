@@ -2,6 +2,8 @@ const express = require('express');
 const { sequelize, Library } = require('../models');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const Joi = require('joi');
+
 
 const route = express.Router();//ovaj ruter dole exportujemo
 route.use(express.json());//da bi nam tumacio sadrzaj kao json
@@ -52,23 +54,52 @@ route.get('/:id', (req, res) => {
 */
 
 route.post('/', (req, res) => {
-    Library.create({ 
-        librarian: req.body.librarian, 
-        opentime: req.body.opentime,
-        booknumber: req.body.booknumber,
-        floor: req.body.floor,
-        working: req.body.working,
-        facultyId: req.body.facultyId  
-    })
-        .then( rows => res.json(rows) )
-        .catch( err => res.status(500).json(err) );
-    // .then( rows => res.json(rows) )
-    // .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );//todo saznaj zasto baza error ako nemas cekiran working
-
+    const schema = Joi.object().keys({
+        librarian: Joi.string().trim().min(4).max(15).required(),
+        opentime: Joi.string().trim().required(),
+        booknumber: Joi.string().trim().required(),
+        floor: Joi.string().trim().required(),
+        working: Joi.string().trim(),
+        facultyId: Joi.string().trim().required(),
+     });
+    const Validation = schema.validate(req.body);
+  
+    if(Validation.error){
+        res.status(422).json({ msg: Validation.error.message })
+    }
+    else{
+        Library.create({ 
+            librarian: req.body.librarian, 
+            opentime: req.body.opentime,
+            booknumber: req.body.booknumber,
+            floor: req.body.floor,
+            working: req.body.working,
+            facultyId: req.body.facultyId  
+        })
+            .then( rows => res.json(rows) )
+            .catch( err => res.status(500).json(err) );
+    }
 });
 
 route.put('/:id', (req, res) => {
-    Library.findOne({ where: { id: req.params.id } })
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        createdAt: Joi.string(),
+        updatedAt: Joi.string(),
+        librarian: Joi.string().trim().min(4).max(15).required(),
+        opentime: Joi.string().trim().required(),
+        booknumber: Joi.string().trim().required(),
+        floor: Joi.string().trim().required(),
+        working: Joi.string().trim(),
+        facultyId: Joi.string().trim().required(),
+     });
+    const Validation = schema.validate(req.body);
+  
+    if(Validation.error){
+        res.status(422).json({ msg: Validation.error.message })
+    }
+    else{
+        Library.findOne({ where: { id: req.params.id } })
         .then( lib => {
             lib.librarian = req.body.librarian, 
             lib.opentime = req.body.opentime,
@@ -81,7 +112,8 @@ route.put('/:id', (req, res) => {
                 .catch( err => res.status(500).json(err) );
         })
         .catch( err => res.status(500).json(err) );
-
+    }
+    
 });
 
 route.delete('/:id', (req, res) => {

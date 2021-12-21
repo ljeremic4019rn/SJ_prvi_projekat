@@ -2,6 +2,7 @@ const express = require('express');
 const { sequelize, Book } = require('../models');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const Joi = require('joi');
 
 
 const route = express.Router();//ovaj ruter dole exportujemo
@@ -54,24 +55,58 @@ route.get('/:id', (req, res) => {
 */
 
 route.post('/', (req, res) => {
-    console.log("ovde smo")
-    Book.create({ 
-        name: req.body.name,
-        writer: req.body.writer,
-        genre: req.body.genre,
-        desciption: req.body.desciption,
-        relesedate: req.body.relesedate,
-        publisher: req.body.publisher,
-        libraryId: req.body.libraryId,
-        userId: req.body.userId
-    })
-    .then( rows => res.json(rows) )
-    .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );
+    const schema = Joi.object().keys({
+        name: Joi.string().trim().min(4).max(15).required(),
+        writer: Joi.string().trim().min(4).max(15).required(),
+        genre: Joi.string().trim().min(4).max(15).required(),
+        desciption: Joi.string().trim().required(),
+        relesedate: Joi.string().trim().required(),
+        publisher: Joi.string().trim().min(4).max(15).required(),
+        libraryId: Joi.string().trim().required(),
+        userId: Joi.string().trim().required()
+     });
+    const Validation = schema.validate(req.body);
 
+    if(Validation.error){
+        res.status(500).json({ msg: Validation.error.message })
+    }
+    else{
+        Book.create({ 
+            name: req.body.name,
+            writer: req.body.writer,
+            genre: req.body.genre,
+            desciption: req.body.desciption,
+            relesedate: req.body.relesedate,
+            publisher: req.body.publisher,
+            libraryId: req.body.libraryId,
+            userId: req.body.userId
+        })
+        .then( rows => res.json(rows) )
+        .catch( err => res.status(500).json(err) );
+    }
 });
 
 route.put('/:id', (req, res) => {
-    Book.findOne({ where: { id: req.params.id } })
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        createdAt: Joi.string(),
+        updatedAt: Joi.string(),
+        name: Joi.string().trim().min(4).max(15).required(),
+        writer: Joi.string().trim().min(4).max(15).required(),
+        genre: Joi.string().trim().min(4).max(15).required(),
+        desciption: Joi.string().trim().required(),
+        relesedate: Joi.string().trim().required(),
+        publisher: Joi.string().trim().min(4).max(15).required(),
+        libraryId: Joi.string().trim().required(),
+        userId: Joi.string().trim().required()
+     });
+    const Validation = schema.validate(req.body);
+
+    if(Validation.error){
+        res.status(500).json({ msg: Validation.error.message })
+    }
+    else{
+        Book.findOne({ where: { id: req.params.id } })
         .then( book => {
             book.name = req.body.name,
             book.writer = req.body.writer,
@@ -85,7 +120,7 @@ route.put('/:id', (req, res) => {
                 .catch( err => res.status(500).json(err) );
         })
         .catch( err => res.status(500).json(err) );
-
+    }
 });
 
 route.delete('/:id', (req, res) => {

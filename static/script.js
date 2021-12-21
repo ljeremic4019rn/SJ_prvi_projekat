@@ -134,13 +134,21 @@ function formUpdate(){//TODO popravi kasnije
         body: stringifiedData
     })
     .then( res => res.json() )
-    .then(result => {
-        console.log('Success:', result);
-        updateList(elementType)
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    // .then(result => {
+    //     console.log('Success:', result);
+    //     updateList(elementType)
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
+    .then( el => {
+        if (el.msg) {
+            alert(el.msg, 'ovo je error msg');
+        } else {
+            updateList(elementType)
+            
+        }
+    });
 }
 
 function formAdd(elem,formName){
@@ -168,16 +176,24 @@ function formAdd(elem,formName){
         },
         body: stringifiedData
     })
+    // .then( res => res.json() )
+    // .then(result => {
+    //     console.log('Success:', result);
+    //     updateList(elementType)
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //   });
 
     .then( res => res.json() )
-    .then( updateList(elementType))
-    // .then( el => {
-    //     if (el.msg) {
-    //         alert(el.msg, 'ovo je error msg');
-    //     } else {
-    //         updateList(elementType)
-    //     }
-    // });
+    .then( el => {
+        if (el.msg) {
+            alert(el.msg, 'ovo je error msg');
+        } else {
+            updateList(elementType)
+            
+        }
+    });
 }
 
 
@@ -220,7 +236,7 @@ function displayFields(data, checker){
 
         let parameters; //parametri iz elementa
         if (checker == 'book'){
-            parameters = `Id: ${element.id}: Name: ${element.name} Writer: ${element.writer} Genre: ${element.genre} Publisher: ${element.publisher} `
+            parameters = `Id: ${element.id}: Name: ${element.name} Writer:${element.writer} Genre: ${element.genre} Publisher: ${element.publisher} `
         }
         else if (checker == 'user'){            
             parameters = `Id: ${element.id}: Credentials:  -${element.name} ${element.lastname}- Username: ${element.username}`

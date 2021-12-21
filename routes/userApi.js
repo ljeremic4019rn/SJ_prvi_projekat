@@ -2,6 +2,8 @@ const express = require('express');
 const { sequelize, User } = require('../models');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const Joi = require('joi');
+
 
 const route = express.Router();//ovaj ruter dole exportujemo
 route.use(express.json());//da bi nam tumacio sadrzaj kao json
@@ -57,25 +59,64 @@ route.get('/:id', (req, res) => {
 */
 
 route.post('/', (req, res) => {
-    User.create({ 
-        name: req.body.name, 
-        lastname: req.body.lastname,
-        birthday: req.body.birthday, 
-        email: req.body.email,
-        username: req.body.username, 
-        password: req.body.password,
-        admin: req.body.admin, 
-        moderator: req.body.moderator,
-        student: req.body.student,
-        facultyId: req.body.facultyId
-    })
-    .then( rows => res.json(rows) )
-    .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );
-
+    const schema = Joi.object().keys({
+        name: Joi.string().trim().min(4).max(15).required(),
+        lastname: Joi.string().trim().min(4).max(15).required(),
+        birthday: Joi.string().trim().required(),
+        email: Joi.string().trim().email().required(),
+        username: Joi.string().trim().min(4).max(10).required(),
+        password: Joi.string().trim().min(5).max(25).required(),
+        facultyId: Joi.string().trim().required(),
+        admin: Joi.string(),
+        moderator: Joi.string(),
+        student: Joi.string()    
+     });
+    const Validation = schema.validate(req.body);
+  
+    if(Validation.error){
+        res.status(422).json({ msg: Validation.error.message })
+    }
+    else{
+        User.create({ 
+            name: req.body.name, 
+            lastname: req.body.lastname,
+            birthday: req.body.birthday, 
+            email: req.body.email,
+            username: req.body.username, 
+            password: req.body.password,
+            admin: req.body.admin, 
+            moderator: req.body.moderator,
+            student: req.body.student,
+            facultyId: req.body.facultyId
+        })
+        .then( rows => res.json(rows) )
+        .catch( err => res.status(500).json(err) );
+    }
 });
 
 route.put('/:id', (req, res) => {
-    User.findOne({ where: { id: req.params.id } })
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        createdAt: Joi.string(),
+        updatedAt: Joi.string(),
+        name: Joi.string().trim().min(4).max(15).required(),
+        lastname: Joi.string().trim().min(4).max(15).required(),
+        birthday: Joi.string().trim().required(),
+        email: Joi.string().trim().email().required(),
+        username: Joi.string().trim().min(4).max(10).required(),
+        password: Joi.string().trim().min(5).max(25).required(),
+        facultyId: Joi.string().trim().required(),
+        admin: Joi.string(),
+        moderator: Joi.string(),
+        student: Joi.string()    
+     });
+    const Validation = schema.validate(req.body);
+  
+    if(Validation.error){
+        res.status(422).json({ msg: Validation.error.message })
+    }
+    else{
+        User.findOne({ where: { id: req.params.id } })
         .then( usr => {
             usr.name = req.body.name, 
             usr.lastname = req.body.lastname,
@@ -93,6 +134,7 @@ route.put('/:id', (req, res) => {
         })
         .catch( err => res.status(500).json(err) );
 
+    } 
 });
 
 route.delete('/:id', (req, res) => {

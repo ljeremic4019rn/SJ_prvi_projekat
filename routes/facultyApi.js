@@ -2,6 +2,7 @@ const express = require('express');
 const { sequelize, Faculty } = require('../models');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const Joi = require('joi');
 
 
 const route = express.Router();//ovaj ruter dole exportujemo
@@ -54,22 +55,52 @@ route.get('/:id', (req, res) => {
 */
 
 route.post('/', (req, res) => {
-    Faculty.create({ 
-        name: req.body.name, 
-        dean: req.body.dean,
-        accredited: req.body.accredited,
-        street:  req.body.street,
-        startDate:  req.body.startDate
-    })
-        // .then( rows => res.json(rows) )
-        // .catch( err => res.status(500).json(err) );
-        .then( rows => res.json(rows) )
-        .catch( err => res.status(500).json({ msg: 'Lose uneseni parametri' }) );
-
+    const schema = Joi.object().keys({
+        name: Joi.string().trim().min(4).max(15).required(),
+        dean: Joi.string().trim().min(4).max(15).required(),
+        accredited: Joi.string().trim(),
+        street: Joi.string().trim().min(4).max(15).required(),
+        startDate: Joi.string().trim().required(),
+     });
+    const Validation = schema.validate(req.body);
+  
+    if(Validation.error){
+        res.status(422).json({ msg: Validation.error.message })
+    }
+    else{
+        Faculty.create({ 
+            name: req.body.name, 
+            dean: req.body.dean,
+            accredited: req.body.accredited,
+            street:  req.body.street,
+            startDate:  req.body.startDate
+        })
+            // .then( rows => res.json(rows) )
+            // .catch( err => res.status(500).json(err) );
+            .then( rows => res.json(rows) )
+            .catch( err => res.status(500).json(err) );
+    }
+   
 });
 
 route.put('/:id', (req, res) => {
-    Faculty.findOne({ where: { id: req.params.id } })
+    const schema = Joi.object().keys({
+        id: Joi.string(),
+        createdAt: Joi.string(),
+        updatedAt: Joi.string(),
+        name: Joi.string().trim().min(4).max(15).required(),
+        dean: Joi.string().trim().min(4).max(15).required(),
+        accredited: Joi.string().trim(),
+        street: Joi.string().trim().min(4).max(15).required(),
+        startDate: Joi.string().trim().required(),
+     });
+    const Validation = schema.validate(req.body);
+  
+    if(Validation.error){
+        res.status(422).json({ msg: Validation.error.message })
+    }
+    else{
+        Faculty.findOne({ where: { id: req.params.id } })
         .then( fac => {
             fac.name = req.body.name, 
             fac.dean = req.body.dean,
@@ -82,7 +113,7 @@ route.put('/:id', (req, res) => {
                 .catch( err => res.status(500).json(err) );
         })
         .catch( err => res.status(500).json(err) );
-
+    }
 });
 
 route.delete('/:id', (req, res) => {
