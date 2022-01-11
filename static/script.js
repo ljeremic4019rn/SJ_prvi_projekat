@@ -5,7 +5,7 @@ const token = cookies[cookies.length - 1];
 
 
 function getAllBooks() {
-    fetch('http://127.0.0.1:8000/admin/book/all',{
+    fetch('http://127.0.0.1:8500/admin/book/all',{
         headers: {
             'authorization': `Bearer ${token}`
         },
@@ -21,7 +21,7 @@ function getAllBooks() {
 }
 
 function getAllUsers() {
-    fetch('http://127.0.0.1:8000/admin/user/all',{
+    fetch('http://127.0.0.1:8500/admin/user/all',{
         headers: {
             'authorization': `Bearer ${token}`
         },
@@ -37,7 +37,7 @@ function getAllUsers() {
 }
 
 function getAllFaculties() {
-    fetch('http://127.0.0.1:8000/admin/faculty/all',{
+    fetch('http://127.0.0.1:8500/admin/faculty/all',{
         headers: {
             'authorization': `Bearer ${token}`
         },
@@ -53,7 +53,7 @@ function getAllFaculties() {
 }
 
 function getAllLibraries() {
-    fetch('http://127.0.0.1:8000/admin/library/all',{
+    fetch('http://127.0.0.1:8500/admin/library/all',{
         headers: {
             'authorization': `Bearer ${token}`
         },
@@ -78,7 +78,7 @@ function formDelete(){
         }
     }
 
-    fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
+    fetch('http://127.0.0.1:8500/admin/' + elementType + '/'+ id,{
         headers: {
             'authorization': `Bearer ${token}`
         },
@@ -97,7 +97,7 @@ function findOneForm(){
     const id = document.getElementById('searchBar').value//!ovde moda da bude int
     //todo proveri da li je int
 
-    fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ id,{
+    fetch('http://127.0.0.1:8500/admin/' + elementType + '/'+ id,{
         headers: {
             'authorization': `Bearer ${token}`
         },
@@ -125,7 +125,7 @@ function formUpdate(){//TODO popravi kasnije
 
     const stringifiedData = JSON.stringify(obj)//mora u const da se stavi inace ne radi
 
-    fetch('http://127.0.0.1:8000/admin/' + elementType + '/'+ obj.id,{
+    fetch('http://127.0.0.1:8500/admin/' + elementType + '/'+ obj.id,{
         method: 'PUT',
         headers: { 
             'Content-Type': 'application/json' ,
@@ -181,7 +181,7 @@ function formAdd(elem,formName){
 
     const stringifiedData = JSON.stringify(obj)//mora u const da se stavi inace ne radi
 
-    fetch('http://127.0.0.1:8000/admin/' + elem,{
+    fetch('http://127.0.0.1:8500/admin/' + elem,{
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json' ,

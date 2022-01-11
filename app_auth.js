@@ -1,5 +1,6 @@
 const express = require('express');
 const { sequelize, User } = require('./models');
+
 const bcrypt = require('bcrypt');//za sifru
 const jwt = require('jsonwebtoken');
 const cors = require('cors');//da dozvolimo sa druge adrese da pristupamo rutama
