@@ -17,31 +17,31 @@
                     <form id = "userForm">
                         <div class="mb-3">
                             <label for="first_name" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="first_name" name="name">
+                            <input type="text" required class="form-control" id="first_name" name="name">
                         </div>
                         <div class="mb-3">
                             <label for="last_name" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="last_name" name="lastname">
+                            <input type="text" required class="form-control" id="last_name" name="lastname">
                         </div>
                         <div class="mb-3">
                             <label for="birth_date" class="form-label">Birth date</label>
-                            <input type="date" class="form-control" id="birth_date" name="birthday">
+                            <input type="date" required class="form-control" id="birth_date" name="birthday">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" name="email">
+                            <input type="text" required class="form-control" id="email" name="email">
                         </div>
                         <div class="mb-3">
                             <label for="Username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username">
+                            <input type="text" required min ="3" maxlength="15" class="form-control" id="username" name="username">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="password" required min ="3" maxlength="15" class="form-control" id="password" name="password">
                         </div>
                         <div class="mb-3">
                             <label for="facultyid" class="form-label">Faculty id</label>
-                            <input type="number" class="form-control" id="facultyid" name="facultyId">
+                            <input type="number" required class="form-control" id="facultyid" name="facultyId">
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="admin" name="admin">

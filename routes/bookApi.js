@@ -24,11 +24,17 @@ function authToken(req, res, next) {
         next();
     });
 }
-  route.use(authToken);
+//   route.use(authToken);
 
 
 route.get('/all',(req,res) => {
     Book.findAll({ /*include: ['library', 'user']*/ })
+        .then(rows => res.json(rows) )
+        .catch(err => res.status(500).json(err));
+});
+
+route.get('/byLib/:id',(req,res) => {
+    Book.findAll({  where: { id: req.params.libraryId } })
         .then(rows => res.json(rows) )
         .catch(err => res.status(500).json(err));
 });
@@ -54,7 +60,7 @@ route.get('/:id', (req, res) => {
   }
 */
 
-route.post('/', (req, res) => {
+route.post('/', authToken,(req, res) => {
     const schema = Joi.object().keys({
         name: Joi.string().trim().min(4).max(15).required(),
         writer: Joi.string().trim().min(4).max(15).required(),
@@ -86,7 +92,7 @@ route.post('/', (req, res) => {
     }
 });
 
-route.put('/:id', (req, res) => {
+route.put('/:id',authToken, (req, res) => {
     const schema = Joi.object().keys({
         id: Joi.string(),
         createdAt: Joi.string(),
@@ -123,7 +129,7 @@ route.put('/:id', (req, res) => {
     }
 });
 
-route.delete('/:id', (req, res) => {
+route.delete('/:id',authToken, (req, res) => {
     Book.findOne({ where: { id: req.params.id } })
         .then( book => {
             book.destroy()

@@ -238,6 +238,7 @@ function updateListForOne(element, checker){
 
     lst.append(li)
     index += 1
+    
 }
 
 function displayFields(data, checker){

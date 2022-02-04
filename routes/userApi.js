@@ -24,7 +24,7 @@ function authToken(req, res, next) {
         next();
     });
 }
-  route.use(authToken);
+//   route.use(authToken);
 
 
 
@@ -58,7 +58,7 @@ route.get('/:id', (req, res) => {
   }
 */
 
-route.post('/', (req, res) => {
+route.post('/',authToken, (req, res) => {
     const schema = Joi.object().keys({
         name: Joi.string().trim().min(4).max(15).required(),
         lastname: Joi.string().trim().min(4).max(15).required(),
@@ -94,7 +94,7 @@ route.post('/', (req, res) => {
     }
 });
 
-route.put('/:id', (req, res) => {
+route.put('/:id',authToken, (req, res) => {
     const schema = Joi.object().keys({
         id: Joi.string(),
         createdAt: Joi.string(),
@@ -137,7 +137,7 @@ route.put('/:id', (req, res) => {
     } 
 });
 
-route.delete('/:id', (req, res) => {
+route.delete('/:id', authToken,(req, res) => {
     User.findOne({ where: { id: req.params.id } })
         .then( usr => {
             usr.destroy()

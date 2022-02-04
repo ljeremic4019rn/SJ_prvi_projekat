@@ -1,5 +1,5 @@
 const express = require('express');
-const { sequelize } = require('./models');
+const { sequelize, Book } = require('./models');
 
 // const userapi = require('./routes/userApi');//ovde se impl router iz endPoints ubacuje
 // const facultyapi = require('./routes/facultyApi');
@@ -7,11 +7,27 @@ const { sequelize } = require('./models');
 // const bookapi = require('./routes/bookApi');
 
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const { raw } = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const http = require('http');
+const { Server } = require("socket.io");
 require('dotenv').config();
+const Joi = require('joi');
+
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: 'http://127.0.0.1:8080',
+        methods: ['GET', 'POST', 'PUT'],
+        credentials: true
+    },
+    allowEIO3: true
+});
+
 
 // app.use('/admin/user', userapi);
 // app.use('/admin/faculty', facultyapi);
@@ -50,28 +66,94 @@ function authToken(req, res, next) {//ovo je middleware koji proverava da li je 
     });
 }
  
-app.get('/register', (req, res) => { 
-    res.sendFile('register.html', { root: './static' });
-});
+// app.get('/register', (req, res) => { //ovo odkomentarises ako hoces da radi na stari nacin
+//     res.sendFile('register.html', { root: './static' });
+// });
 
-app.get('/login', (req, res) => {
-    res.sendFile('login.html', { root: './static' });
-});
+// app.get('/login', (req, res) => {
+//     res.sendFile('login.html', { root: './static' });
+// });
+
 
 
 // app.get('/', /*authToken, */(req, res) => {//ovde smo middleware stavili jer stitimo tu putanju, ako nismo logovani preusmerava nas iznad na /login
 //     res.sendFile('index.html', { root: './static' });
 // });
 
-app.get('/', authToken, (req, res) => {//ovde smo middleware stavili jer stitimo tu putanju, ako nismo logovani preusmerava nas iznad na /login
-    res.sendFile('index.html', { root: './static' });
+// app.get('/', authToken, (req, res) => {//ovde smo middleware stavili jer stitimo tu putanju, ako nismo logovani preusmerava nas iznad na /login
+//     res.sendFile('index.html', { root: './static' });
+// });
+
+function authSocket(msg, next) {
+    if (msg[1].token == null) {
+        next(new Error("Not authenticated"));
+    } else {
+        jwt.verify(msg[1].token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if (err) {
+                next(new Error(err));
+            } else {
+                msg[1].user = user;
+                next();
+            }
+        });
+    }
+}
+
+io.on('connection', socket => {
+    socket.use(authSocket);
+ 
+    socket.on('addbook', msg => {
+        const schema = Joi.object().keys({
+            name: Joi.string().trim().min(4).max(15).required(),
+            writer: Joi.string().trim().min(4).max(15).required(),
+            genre: Joi.string().trim().min(4).max(15).required(),
+            desciption: Joi.string().trim().required(),
+            relesedate: Joi.string().trim().required(),
+            publisher: Joi.string().trim().min(4).max(15).required(),
+            libraryId: Joi.string().trim().required(),
+            userId: Joi.string().trim().required()
+        });
+            console.log(schema.validate(msg.body));
+
+
+         const Validation = schema.validate(msg.body);
+
+         console.log(Validation);
+
+        if(Validation.error){
+            res.status(500).json({ msg: Validation.error.message })
+        }
+        else{
+            Book.create({ 
+                name: msg.body.name,
+                writer: msg.body.writer,
+                genre: msg.body.genre,
+                desciption: msg.body.desciption,
+                relesedate: msg.body.relesedate,
+                publisher: msg.body.publisher,
+                libraryId: msg.body.libraryId,
+                userId: msg.body.userId
+            })
+            // .then( rows => res.json(rows) )
+            // .catch( err => res.status(500).json(err) );
+            .then( rows => {
+                Book.findOne({ where: { id: rows.id }})
+                    .then(msg => io.emit('addbook', JSON.stringify(msg)) ) 
+            }).catch( err => res.status(500).json(err) );
+        }
+
+    });
+
+    socket.on('error', err => socket.emit('error', err.message) );
 });
+
+
 
 
 
 app.use(express.static(path.join(__dirname, 'static')));
 
-app.listen({ port: 8000 }, async () => {
+server.listen({ port: 8000 }, async () => {
     await sequelize.authenticate();
     console.log("startovan app");
 });

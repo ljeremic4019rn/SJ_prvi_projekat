@@ -10,7 +10,7 @@ require('dotenv').config();//prosledi objekat koji ima cnofig metodu, ne treba n
 const app = express();
 
 var corsOptions = {//sta odakle sme
-    origin: 'http://127.0.0.1:8000',
+    origin: 'http://127.0.0.1:8080',
     optionsSuccessStatus: 200
 }
 
@@ -100,7 +100,7 @@ app.post('/login', (req, res) => {
                 };
                 const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
 
-                res.json({ token: token })
+                res.json({ token: token, userId: cryptedUser.id})
             // res.json(cryptedUser)
             }
             else{

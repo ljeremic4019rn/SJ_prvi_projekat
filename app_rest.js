@@ -11,7 +11,7 @@ const bookapi = require('./routes/bookApi');
 const app = express();
 
 var corsOptions = {//sta odakle sme
-    origin: 'http://127.0.0.1:8000',
+    origin: 'http://127.0.0.1:8080',
     optionsSuccessStatus: 200
 }
 
@@ -30,5 +30,5 @@ app.use('/admin/book', bookapi);
 
 app.listen({ port: 8500 }, async () => {
     await sequelize.authenticate();
-    console.log("povezan app za autentifikaciju");
+    console.log("povezan app za restapi");
 });
