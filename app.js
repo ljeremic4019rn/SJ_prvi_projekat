@@ -102,8 +102,54 @@ function authSocket(msg, next) {
 io.on('connection', socket => {
     socket.use(authSocket);
  
-    socket.on('addbook', msg => {
+    {   
+    // socket.on('addbook', msg => {
+    //     const schema = Joi.object().keys({
+    //         name: Joi.string().trim().min(4).max(15).required(),
+    //         writer: Joi.string().trim().min(4).max(15).required(),
+    //         genre: Joi.string().trim().min(4).max(15).required(),
+    //         desciption: Joi.string().trim().required(),
+    //         relesedate: Joi.string().trim().required(),
+    //         publisher: Joi.string().trim().min(4).max(15).required(),
+    //         libraryId: Joi.string().trim().required(),
+    //         userId: Joi.string().trim().required()
+    //     });
+    //     // console.log(schema.validate(msg.body));
+
+
+    //      const Validation = schema.validate(msg.body);
+
+    //     //  console.log(Validation);
+
+    //     if(Validation.error){
+    //         res.status(500).json({ msg: Validation.error.message })
+    //     }
+    //     else{
+    //         Book.create({ 
+    //             name: msg.body.name,
+    //             writer: msg.body.writer,
+    //             genre: msg.body.genre,
+    //             desciption: msg.body.desciption,
+    //             relesedate: msg.body.relesedate,
+    //             publisher: msg.body.publisher,
+    //             libraryId: msg.body.libraryId,
+    //             userId: msg.body.userId
+    //         })
+    //         // .then( rows => res.json(rows) )
+    //         // .catch( err => res.status(500).json(err) );
+    //         .then( rows => {
+    //             Book.findOne({ where: { id: rows.id }})
+    //                 .then(msg => io.emit('addbook', JSON.stringify(msg)) ) 
+    //         }).catch( err => res.status(500).json(err) );
+    //     }
+
+    // });
+    }
+    socket.on('updateBook', msg => {
         const schema = Joi.object().keys({
+            id: Joi.string(),
+            createdAt: Joi.string(),
+            updatedAt: Joi.string(),
             name: Joi.string().trim().min(4).max(15).required(),
             writer: Joi.string().trim().min(4).max(15).required(),
             genre: Joi.string().trim().min(4).max(15).required(),
@@ -112,37 +158,38 @@ io.on('connection', socket => {
             publisher: Joi.string().trim().min(4).max(15).required(),
             libraryId: Joi.string().trim().required(),
             userId: Joi.string().trim().required()
-        });
-            console.log(schema.validate(msg.body));
+         });
 
-
+         console.log(schema.validate(msg.body));
          const Validation = schema.validate(msg.body);
-
          console.log(Validation);
-
+    
         if(Validation.error){
             res.status(500).json({ msg: Validation.error.message })
         }
         else{
-            Book.create({ 
-                name: msg.body.name,
-                writer: msg.body.writer,
-                genre: msg.body.genre,
-                desciption: msg.body.desciption,
-                relesedate: msg.body.relesedate,
-                publisher: msg.body.publisher,
-                libraryId: msg.body.libraryId,
-                userId: msg.body.userId
-            })
-            // .then( rows => res.json(rows) )
-            // .catch( err => res.status(500).json(err) );
-            .then( rows => {
-                Book.findOne({ where: { id: rows.id }})
-                    .then(msg => io.emit('addbook', JSON.stringify(msg)) ) 
-            }).catch( err => res.status(500).json(err) );
-        }
+            Book.findOne({ where: { id: msg.body.id } })
+            .then( book => {
+                book.name = msg.body.name,
+                book.writer = msg.body.writer,
+                book.genre = msg.body.genre,
+                book.desciption = msg.body.desciption,
+                book.relesedate = msg.body.relesedate,
+                book.publisher = msg.body.publisher
 
+                book.save()
+                    // .then( rows => console.log(rows) )
+                    // .catch( err => console.log(err) );
+                    .then( rows => {
+                        Book.findOne({ where: { id: rows.id }})
+                            .then(msg => io.emit('updateBook', JSON.stringify(msg)) ) 
+                    }).catch( err => res.status(500).json(err) );
+            })
+            .catch( err => res.status(500).json(err) );
+        }
     });
+
+
 
     socket.on('error', err => socket.emit('error', err.message) );
 });
